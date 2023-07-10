@@ -1,6 +1,8 @@
 package com.ecommerce.api.controller;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,17 +19,27 @@ public class CustomerAccountController {
 	public String display() {
 		return "Testing successful";
 	}
-	
+
 	@Autowired
 	private CustomerAccountService customerAccountService;
 
-	
 	@PostMapping("/identity")
-	public void createCustomerAccount(@RequestParam(value = "phoneNumber") String phoneNumber,
+	public ResponseEntity createCustomerAccount(@RequestParam(value = "phoneNumber") String phoneNumber,
 			@RequestParam(value = "email") String emailAddress) {
-		System.out.println(phoneNumber +" " +emailAddress);
-		customerAccountService.customerAccountDetails(phoneNumber, emailAddress);
-		
+
+		JSONObject jsonResponse = new JSONObject();
+
+		try {
+			jsonResponse = customerAccountService.customerAccountDetails(phoneNumber, emailAddress);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (!jsonResponse.isEmpty()) {
+			return ResponseEntity.ok(jsonResponse);
+		}
+
+		return ResponseEntity.badRequest().body("Something went wrong - Please check the information");
 
 	}
 }

@@ -41,6 +41,17 @@ public class CustomerAccountDetails implements Serializable {
 	@Column(name = "deleteAt")
 	private String deletedAt;
 
+	
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}

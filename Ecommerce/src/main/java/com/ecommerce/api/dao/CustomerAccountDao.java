@@ -12,15 +12,27 @@ import com.ecommerce.api.entity.CustomerAccountDetails;
 @Repository
 public interface CustomerAccountDao extends JpaRepository<CustomerAccountDetails, Integer> {
 
-	@Query("select t.phoneNumber from CustomerAccountDetails t  where t.phoneNumber =:n")
-	String customerAccountDetailsByPhone(@Param("n") String phoneNumber);
+	@Query("select t.phoneNumber from CustomerAccountDetails t  where t.phoneNumber =:n and t.linkPrecedence=:m")
+	String customerAccountDetailsByPhone(@Param("n") String phoneNumber,@Param("m") String link);
 	
-	@Query("select t.email from CustomerAccountDetails t  where t.email =:n")
-	String customerAccountDetailsByEmail(@Param("n") String email);
+	@Query("select t.email from CustomerAccountDetails t  where t.email =:n  and t.linkPrecedence=:m ")
+	String customerAccountDetailsByEmail(@Param("n") String email,@Param("m") String link);
 	
-	@Query("select t.linkedId from CustomerAccountDetails t where t.email =:n or t.phoneNumber =:n")
-	int getLinkedId(@Param("n") String availableAccId);
+	@Query("select t.id from CustomerAccountDetails t where  t.phoneNumber =:n and t.linkPrecedence=:m ")
+	Integer getLinkedIdByPhone(@Param("n") String availablePhoneNumber,@Param("m") String link);
 	
+	@Query("select t.id from CustomerAccountDetails t where  t.email =:n and t.linkPrecedence=:m ")
+	Integer getLinkedIdByEmail(@Param("n") String availableEmailAddress,@Param("m") String link);
+	
+	@Query("select t.id from CustomerAccountDetails t where  t.phoneNumber =:n or t.email =:m")
+	Integer getLinkedId(@Param("n") String availablePhoneNumber,@Param("m") String availableEmailAddress);
+	
+	
+	@Query("select t from CustomerAccountDetails t  where t.phoneNumber =:n and t.linkPrecedence=:m")
+	CustomerAccountDetails customerObject(@Param("n") String phoneNumber,@Param("m") String link);
+	
+	@Query("select t from CustomerAccountDetails t  where t.email =:n and t.linkPrecedence=:m")
+	CustomerAccountDetails customerObjectbyemail(@Param("n") String email,@Param("m") String link);
 	
 	
 
